@@ -1,0 +1,27 @@
+import streamlit as st
+import pandas as pd
+
+# Function to load the dataset
+@st.cache
+def load_data():
+    # Load the CSV file into a DataFrame
+    return pd.read_csv('suv_sales_india.csv')
+
+def main():
+    # Title of the app
+    st.title("Top Selling SUVs in India")
+
+    # Load the data
+    data = load_data()
+
+    # Display the raw data
+    if st.checkbox("Show raw data"):
+        st.write(data)
+
+    # Display the top-selling SUVs
+    st.subheader("Top Selling SUVs")
+    top_selling_suvs = data.sort_values(by='Units_Sold', ascending=False)
+    st.write(top_selling_suvs[['SUV_Model', 'Units_Sold']].reset_index(drop=True))
+
+if __name__ == "__main__":
+    main()
