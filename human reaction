@@ -1,0 +1,27 @@
+import streamlit as st
+from PIL import Image
+from deepface import DeepFace
+
+# Title of the app
+st.title("Emotion Recognition App")
+
+# Upload image
+uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+
+if uploaded_file is not None:
+    # Display the image
+    st.image(uploaded_file, caption='Uploaded Image.', use_column_width=True)
+    
+    # Convert image to file-like object
+    image = Image.open(uploaded_file)
+    
+    # Save the image to a temporary location
+    image.save("temp_image.jpg")
+    
+    # Perform emotion recognition
+    try:
+        analysis = DeepFace.analyze("temp_image.jpg", actions=['emotion'])
+        emotion = analysis[0]['dominant_emotion']
+        st.write(f"Detected emotion: {emotion}")
+    except Exception as e:
+        st.write("Error in emotion detection:", e)
